@@ -1,236 +1,73 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>PropData Estonia API Docs — Address, Cadastral, Geometry & Building Graph</title>
-  <meta name="description" content="Production documentation for PropData Estonia: official address resolution, native cadastral-code lookup, coordinate-to-parcel resolution, available geometry, ADS identity, building relationships, EHR codes, platform status and provenance.">
-  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
-  <meta name="theme-color" content="#061426">
-  <link rel="canonical" href="https://ee.proptechusa.ai/docs">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="PropData Estonia">
-  <meta property="og:title" content="PropData Estonia API Documentation">
-  <meta property="og:description" content="Estonia-native property identity: addresses, cadastral codes, parcel geometry, ADS objects, building relationships and EHR codes through one developer API.">
-  <meta property="og:url" content="https://ee.proptechusa.ai/docs">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PropData Estonia API Documentation">
-  <meta name="twitter:description" content="Build on Estonia's official-source property graph with address, cadastral, geometry and building relationship workflows.">
-  <style>
-    :root{--navy:#061426;--navy2:#0b1e36;--ink:#0b1730;--muted:#65738a;--line:#dce4ee;--soft:#f4f7fb;--white:#fff;--blue:#2f74ff;--cyan:#63d9ff;--green:#29c98b;--gold:#d7961a;--sidebar:288px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#fff}a{color:inherit;text-decoration:none}code,pre{font-family:var(--mono)}
-    .topbar{position:sticky;top:0;z-index:50;height:70px;background:rgba(6,20,38,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.09);color:white}.topbar-inner{height:100%;max-width:1500px;margin:auto;padding:0 28px;display:flex;align-items:center;gap:25px}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.03em}.brand img{width:34px;height:34px}.brand small{display:block;font-size:9px;letter-spacing:.18em;color:#8faac8}.brand strong{display:block;line-height:1}.toplinks{margin-left:auto;display:flex;gap:18px;align-items:center;color:#b8c5d6;font-size:13px}.toplinks a:hover{color:white}.toplinks .cta{color:#061426;background:linear-gradient(135deg,#7ee8ff,#79b4ff);padding:9px 13px;border-radius:9px;font-weight:800}
-    .layout{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr)}.sidebar{position:sticky;top:70px;height:calc(100vh - 70px);overflow:auto;border-right:1px solid var(--line);background:#f8fafc;padding:25px 0}.side-title{padding:8px 22px 4px;font-size:10px;font-weight:900;letter-spacing:.14em;color:#8290a5;text-transform:uppercase}.side-link{display:block;padding:8px 22px;border-left:3px solid transparent;color:#47566c;font-size:13px}.side-link:hover{background:#eef4fb;color:#0a56ce}.side-link code{font-size:11px;color:#1764d7}.side-link.major{font-weight:750;color:#18263d}
-    .content{max-width:1080px;padding:58px 64px 120px}.hero{padding-bottom:50px;border-bottom:1px solid var(--line)}.badge{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:900;letter-spacing:.12em;color:#075fc7;background:#eaf3ff;border:1px solid #cfe3ff;border-radius:999px;padding:7px 10px}.badge i{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 0 5px rgba(41,201,139,.08)}.hero h1{font-size:clamp(44px,6vw,72px);letter-spacing:-.06em;line-height:.98;margin:20px 0 18px}.hero h1 span{color:var(--blue)}.hero p{max-width:830px;font-size:19px;color:var(--muted)}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:10px;font-weight:800;border:1px solid var(--line)}.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
-    .proof{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:34px}.proof div{border:1px solid var(--line);border-radius:13px;padding:15px;background:var(--soft)}.proof b{display:block;font-size:22px;letter-spacing:-.04em}.proof span{font-size:11px;color:var(--muted)}
-    .section{padding:58px 0;border-bottom:1px solid var(--line);scroll-margin-top:90px}.section h2{font-size:35px;letter-spacing:-.045em;margin:0 0 12px}.section h3{font-size:18px;margin:27px 0 8px}.section>p,.section-copy{color:var(--muted);font-size:16px;max-width:860px}.callout{margin:18px 0;padding:15px 17px;border-radius:12px;border:1px solid #cfe3ff;background:#f2f8ff;color:#38506c}.callout.green{border-color:#cceede;background:#effbf6}.callout.warn{border-color:#f1dfad;background:#fff9e9}.callout.dark{background:#07182c;border-color:#183654;color:#b9cae0}.callout strong{color:var(--ink)}.callout.dark strong{color:white}
-    .workflow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}.workflow{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(#fff,#f8fbff)}.workflow span{display:block;font:900 10px var(--mono);color:#2c6de8;margin-bottom:9px}.workflow b{display:block;font-size:16px}.workflow p{font-size:12px;color:var(--muted);margin-bottom:0}
-    .endpoint{margin:24px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:white;box-shadow:0 10px 35px rgba(20,38,65,.06)}.endpoint-head{display:flex;align-items:center;gap:12px;padding:15px 18px;background:#f8fafc;border-bottom:1px solid var(--line)}.method{font:900 10px var(--mono);color:#087640;background:#dcfce8;border-radius:6px;padding:5px 8px}.path{font:700 13px var(--mono);overflow-wrap:anywhere}.desc{margin-left:auto;color:var(--muted);font-size:12px}.endpoint-body{padding:22px}.endpoint-body h3{font-size:17px;margin:0 0 8px}.endpoint-body p{color:var(--muted)}
-    .params{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:13px}.params th{text-align:left;background:#f8fafc;padding:9px 11px;border-bottom:1px solid var(--line);font-size:10px;letter-spacing:.08em;color:#6d7b90;text-transform:uppercase}.params td{padding:10px 11px;border-bottom:1px solid #eef2f6;vertical-align:top}.params td:first-child{font-family:var(--mono);font-weight:700;color:#0a5ecc}.req{font-size:9px;font-weight:900;color:#8a5d00;background:#fff2c7;border-radius:999px;padding:3px 6px}.opt{font-size:9px;color:#617086;background:#eef2f7;border-radius:999px;padding:3px 6px}
-    .codebox{background:#061426;color:#dcecff;border-radius:12px;overflow:auto;margin:16px 0}.codebar{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#7f98b7;font:11px var(--mono);display:flex;justify-content:space-between;gap:15px}pre{margin:0;padding:17px;font-size:12px;line-height:1.72;white-space:pre-wrap}.c{color:#7890aa}.k{color:#72d9ff}.s{color:#8ef0c6}.n{color:#ffd17e}.v{color:#d5b4ff}
-    .semantics,.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.semantic,.field-card{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff}.semantic code,.field-card code{color:#0a63cf;font-weight:800}.semantic p,.field-card p{font-size:12px;color:var(--muted);margin:6px 0 0}.field-card b{display:block;margin-bottom:5px}
-    .graph{margin:25px 0;padding:28px;border:1px solid #173654;border-radius:18px;background:linear-gradient(145deg,#07172a,#0b2340);color:white}.graph-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.node{padding:12px 14px;border:1px solid rgba(126,220,255,.23);border-radius:11px;background:rgba(255,255,255,.035)}.node b{display:block;font-size:13px}.node small{color:#91a7c2}.arrow{color:#6bdcff;font-size:19px}.graph-note{margin-top:18px;color:#aabbd0;font-size:12px}
-    .class-table{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.class-pill{border:1px solid var(--line);border-radius:11px;padding:12px}.class-pill code{font-weight:900;color:#1764d7}.class-pill span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-    .live-example{border:1px solid #bee7d5;border-radius:16px;background:#f3fcf8;padding:23px;margin:22px 0}.live-example-label{font:900 10px var(--mono);letter-spacing:.1em;color:#118052;margin-bottom:8px}.live-example h3{margin:0 0 6px}.live-example p{margin:0;color:#536d62}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.chip{font:700 10px var(--mono);padding:6px 8px;border-radius:999px;background:white;border:1px solid #d3eadd;color:#275f48}
-    .footer{padding:35px 0;color:#77859a;font-size:12px}.footer-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}.rapid{background:linear-gradient(135deg,#0d223e,#071427);color:white;border-radius:18px;padding:28px;margin-top:26px}.rapid h3{margin:0 0 8px;font-size:24px}.rapid p{color:#aebfd3}.rapid a{display:inline-flex;background:#6f85ff;border-radius:9px;padding:10px 13px;font-weight:800;margin-top:7px}
-    @media(max-width:1050px){:root{--sidebar:238px}.content{padding:45px 36px 100px}.proof{grid-template-columns:repeat(3,1fr)}.workflow-grid{grid-template-columns:1fr 1fr}.class-table{grid-template-columns:1fr 1fr}}
-    @media(max-width:760px){.toplinks a:not(.cta){display:none}.layout{display:block}.sidebar{display:none}.content{padding:38px 20px 80px}.hero h1{font-size:48px}.proof{grid-template-columns:1fr 1fr}.workflow-grid,.semantics,.field-grid,.class-table{grid-template-columns:1fr}.endpoint-head{align-items:flex-start;flex-wrap:wrap}.desc{margin-left:0;width:100%}.params{display:block;overflow-x:auto}.topbar-inner{padding:0 17px}.graph-row{display:grid;grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
-  </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"PropData Estonia API Documentation","url":"https://ee.proptechusa.ai/docs","dateModified":"2026-09-02","author":{"@type":"Organization","name":"PropTechUSA.ai","url":"https://proptechusa.ai/"},"about":{"@type":"SoftwareApplication","name":"PropData Estonia Property & Cadastral API","applicationCategory":"DeveloperApplication","areaServed":{"@type":"Country","name":"Estonia"}}}</script>
-</head>
-<body>
-<header class="topbar"><div class="topbar-inner"><a class="brand" href="/"><img src="/favicon.svg" alt=""><span><strong>PROPDATA</strong><small>ESTONIA DOCS</small></span></a><nav class="toplinks"><a href="/">Product</a><a href="https://propdata.proptechusa.ai/">PropData</a><a href="https://global.proptechusa.ai/">Global</a><a href="https://data.proptechusa.ai/">Data</a><a href="mailto:sales@proptechusa.ai">Support</a><a class="cta" href="/#pricing">Get API Access</a></nav></div></header>
-<div class="layout">
-<aside class="sidebar" aria-label="Documentation navigation">
-  <div class="side-title">Getting started</div>
-  <a class="side-link major" href="#overview">Overview</a><a class="side-link" href="#workflows">API workflows</a><a class="side-link" href="#authentication">Authentication</a><a class="side-link" href="#semantics">Response semantics</a>
-  <div class="side-title">Property</div>
-  <a class="side-link" href="#address"><code>GET</code> Address → property</a><a class="side-link" href="#cadastral"><code>GET</code> Cadastral code → property</a><a class="side-link" href="#canonical"><code>GET</code> Canonical parcel → property</a><a class="side-link" href="#location"><code>GET</code> Coordinates → property</a>
-  <div class="side-title">Estonia graph</div>
-  <a class="side-link" href="#native">Native identifiers</a><a class="side-link" href="#address-graph">Address hierarchy</a><a class="side-link" href="#objects">Property objects</a><a class="side-link" href="#buildings">Building relationships</a>
-  <div class="side-title">Platform</div>
-  <a class="side-link" href="#countries"><code>GET</code> /v1/countries</a><a class="side-link" href="#health"><code>GET</code> /v1/health</a><a class="side-link" href="#stats"><code>GET</code> /v1/stats</a><a class="side-link" href="#changelog"><code>GET</code> /v1/changelog</a>
-  <div class="side-title">Operations</div>
-  <a class="side-link" href="#errors">Errors & quotas</a><a class="side-link" href="#sources">Sources & provenance</a><a class="side-link" href="#rapidapi">RapidAPI</a>
-</aside>
-<main class="content">
-<section class="hero" id="overview">
-  <div class="badge"><i></i> ESTONIA · PRODUCTION PROPERTY GRAPH</div>
-  <h1>Estonia-native identity.<br><span>One developer contract.</span></h1>
-  <p>Resolve an official address, native cadastral code, canonical parcel identity or coordinate into a source-aware Estonia property graph with available polygon geometry, ADS identifiers, address hierarchy, related objects, building relationships and EHR building codes.</p>
-  <div class="hero-actions"><a class="btn primary" href="#address">Make your first request</a><a class="btn" href="/#pricing">View pricing</a></div>
-  <div class="proof"><div><b>1.39M+</b><span>normalized addresses</span></div><div><b>782K+</b><span>cadastral-unit graph objects</span></div><div><b>505K+</b><span>parcels with materialized geometry</span></div><div><b>971K+</b><span>building ↔ parcel links</span></div><div><b>10.27M+</b><span>object ↔ address links</span></div></div>
-</section>
-
-<section class="section" id="workflows">
-  <h2>Seven workflows. Six REST routes.</h2>
-  <p>The Estonia product is intentionally simple at the HTTP layer while exposing several distinct developer workflows. Address, native cadastral and canonical parcel lookup share the same property route but behave as different identity inputs.</p>
-  <div class="workflow-grid">
-    <div class="workflow"><span>PROPERTY</span><b>Address → property</b><p>Official ADS address resolution with address identity, hierarchy, related objects and parcel attachment.</p></div>
-    <div class="workflow"><span>PROPERTY</span><b>Cadastral code → property</b><p>Use Estonia's native katastritunnus directly, for example <code>29601:014:0290</code>.</p></div>
-    <div class="workflow"><span>PROPERTY</span><b>Canonical parcel → property</b><p>Resolve a PropData canonical ID such as <code>ads_ky.10477142</code>.</p></div>
-    <div class="workflow"><span>LOCATION</span><b>Coordinates → property</b><p>Point-in-polygon resolution without forcing an address text match.</p></div>
-    <div class="workflow"><span>PLATFORM</span><b>Country capabilities</b><p>Discover PropData's country-aware market adapters and status.</p></div>
-    <div class="workflow"><span>OPERATIONS</span><b>Health + stats + changes</b><p>Public health, platform proof points and production changelog.</p></div>
-  </div>
-</section>
-
-<section class="section" id="authentication">
-  <h2>Authentication</h2>
-  <p>Direct PropData requests use an API key in the <code>x-api-key</code> header. Keep production credentials server-side. RapidAPI subscribers use the credentials RapidAPI inserts into marketplace requests.</p>
-  <div class="codebox"><div class="codebar"><span>Direct REST</span><span>server-side only</span></div><pre>curl "https://propdata-api-worker.sales-fd3.workers.dev/v1/property?country=EE&amp;parcel=29601:014:0290" \
-  -H "x-api-key: $PROPDATA_API_KEY"</pre></div>
-  <div class="callout"><strong>Never place a direct PropData key in a URL, browser bundle, public repository or client analytics.</strong></div>
-</section>
-
-<section class="section" id="address">
-  <h2>Address → property</h2>
-  <p>Resolve an official Estonia address into the property graph beneath it. Estonia responses preserve ADS-native identity instead of flattening the market into a generic address schema.</p>
-  <div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/property?country=EE&amp;address=...</span><span class="desc">Official address resolution</span></div><div class="endpoint-body">
-    <table class="params"><thead><tr><th>Parameter</th><th>Status</th><th>Description</th></tr></thead><tbody><tr><td>country</td><td><span class="req">required</span></td><td>Set to <code>EE</code>.</td></tr><tr><td>address</td><td><span class="req">required</span></td><td>Full Estonian address. Official formatting is preferred.</td></tr></tbody></table>
-    <div class="codebox"><div class="codebar"><span>Verified example</span><span>Estonia</span></div><pre>GET /v1/property?country=EE&amp;address=Viljandi%20maakond%2C%20Mulgi%20vald%2C%20Abja-Paluoja%20linn%2C%20Pärnu%20mnt%2051a</pre></div>
-    <div class="codebox"><div class="codebar"><span>Enriched response shape</span><span>additive fields</span></div><pre>{
-  <span class="k">"country_code"</span>: <span class="s">"EE"</span>,
-  <span class="k">"match_level"</span>: <span class="s">"address_to_parcel"</span>,
-  <span class="k">"coverage_status"</span>: <span class="s">"live_enriched"</span>,
-  <span class="k">"parcel_resolution"</span>: <span class="s">"matched"</span>,
-  <span class="k">"address"</span>: {
-    <span class="k">"global_address_id"</span>: <span class="s">"EE:ADS:3492308"</span>,
-    <span class="k">"address_id"</span>: <span class="s">"3492308"</span>,
-    <span class="k">"address_lifecycle"</span>: <span class="s">"Current"</span>,
-    <span class="k">"postcode"</span>: <span class="s">"69403"</span>,
-    <span class="k">"latitude"</span>: <span class="n">58.12511901</span>,
-    <span class="k">"longitude"</span>: <span class="n">25.34680635</span>,
-    <span class="k">"native_identity"</span>: {
-      <span class="k">"adr_id"</span>: <span class="s">"3492308"</span>,
-      <span class="k">"code_address"</span>: <span class="s">"844801060000005U10000CAA500000000"</span>,
-      <span class="k">"primary_object_ads_oid"</span>: <span class="s">"CU03803142"</span>
-    },
-    <span class="k">"validity"</span>: {
-      <span class="k">"valid_from"</span>: <span class="s">"20191016081152"</span>,
-      <span class="k">"source_updated_at"</span>: <span class="s">"20260504150915.633017"</span>
-    },
-    <span class="k">"source_coordinates"</span>: {
-      <span class="k">"srid"</span>: <span class="s">"3301"</span>,
-      <span class="k">"easting"</span>: <span class="s">"579355.38"</span>,
-      <span class="k">"northing"</span>: <span class="s">"6443467.01"</span>
-    }
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PropData Estonia API Docs — Land, Buildings, Energy & Permits</title>
+<meta name="description" content="PropData Estonia developer documentation: address and cadastral lookup, land intelligence, assessed land value, parcel geometry, EHR building specifications, energy certificates, permit/document history and provenance.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="theme-color" content="#061426"><link rel="canonical" href="https://ee.proptechusa.ai/docs"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website"><meta property="og:site_name" content="PropData Estonia"><meta property="og:title" content="PropData Estonia API Documentation"><meta property="og:description" content="Estonia-native property intelligence: addresses, cadastral land, geometry, buildings, energy and document history through one source-aware API."><meta property="og:url" content="https://ee.proptechusa.ai/docs">
+<style>
+:root{--n:#061426;--n2:#0a1d34;--i:#0a1730;--m:#617086;--l:#dce5ef;--s:#f5f8fc;--b:#2f74ff;--c:#62dcf8;--g:#25bf83;--w:#fff;--side:285px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--i);background:#fff}a{text-decoration:none;color:inherit}code,pre{font-family:var(--mono)}.top{height:70px;position:sticky;top:0;z-index:50;background:rgba(6,20,38,.97);color:#fff;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(15px)}.topin{height:100%;max-width:1500px;margin:auto;padding:0 26px;display:flex;align-items:center;gap:22px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.03em}.brand img{width:34px}.brand small{display:block;color:#91a8c1;font-size:9px;letter-spacing:.16em}.links{margin-left:auto;display:flex;gap:17px;align-items:center;color:#b9c5d5;font-size:13px}.links .cta{background:linear-gradient(135deg,#79e7ff,#7aaeff);color:#061426;padding:9px 13px;border-radius:9px;font-weight:850}.layout{display:grid;grid-template-columns:var(--side) minmax(0,1fr)}aside{position:sticky;top:70px;height:calc(100vh - 70px);overflow:auto;background:#f8fafc;border-right:1px solid var(--l);padding:22px 0}.st{padding:8px 21px 3px;text-transform:uppercase;font-size:9px;font-weight:900;letter-spacing:.14em;color:#8491a4}.sl{display:block;padding:7px 21px;border-left:3px solid transparent;color:#47566b;font-size:13px}.sl:hover{background:#eef4fb;color:#075fce}.sl code{font-size:10px;color:#1764d7}.content{max-width:1100px;padding:56px 64px 120px}.hero{padding-bottom:50px;border-bottom:1px solid var(--l)}.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid #cfe3ff;background:#eef6ff;color:#075fc7;font-size:10px;font-weight:900;letter-spacing:.1em}.badge i{width:7px;height:7px;border-radius:50%;background:var(--g)}h1{font-size:clamp(44px,6vw,72px);line-height:.98;letter-spacing:-.06em;margin:20px 0 18px}h1 span{color:var(--b)}.hero>p{font-size:19px;color:var(--m);max-width:850px}.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:28px}.proof div{padding:15px;border:1px solid var(--l);border-radius:13px;background:var(--s)}.proof b{display:block;font-size:22px;letter-spacing:-.04em}.proof span{font-size:11px;color:var(--m)}.section{padding:55px 0;border-bottom:1px solid var(--l);scroll-margin-top:85px}.section h2{font-size:35px;letter-spacing:-.045em;line-height:1.05;margin:0 0 11px}.section>p{font-size:16px;color:var(--m);max-width:870px}.rollout{margin:20px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rollout div{padding:17px;border:1px solid var(--l);border-radius:14px}.rollout small{font:900 9px var(--mono);letter-spacing:.11em;color:#08794c}.rollout b{display:block;font-size:20px;margin:5px 0}.rollout span{display:block;color:var(--m);font-size:11px}.endpoint{margin:22px 0;border:1px solid var(--l);border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(20,38,65,.06)}.eh{display:flex;gap:11px;align-items:center;padding:14px 17px;background:#f8fafc;border-bottom:1px solid var(--l)}.method{font:900 10px var(--mono);padding:5px 8px;border-radius:6px;background:#dcfce8;color:#087640}.path{font:750 13px var(--mono);overflow-wrap:anywhere}.ed{padding:21px}.code{margin:15px 0;border-radius:12px;background:#061426;color:#dcecff;overflow:auto}.cb{padding:8px 13px;border-bottom:1px solid rgba(255,255,255,.08);color:#7f98b7;font:11px var(--mono)}pre{margin:0;padding:17px;font-size:12px;line-height:1.72;white-space:pre-wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.card{padding:17px;border:1px solid var(--l);border-radius:13px;background:#fff}.card b{display:block}.card code{color:#075fc7;font-weight:800}.card p{font-size:12px;color:var(--m);margin:5px 0 0}.dark{padding:28px;border:1px solid #1a3855;border-radius:18px;background:linear-gradient(145deg,#07172a,#0b2340);color:#fff}.dark p{color:#afc0d3}.dark a{color:#72dcfa;font-weight:800}.table{width:100%;border-collapse:collapse;margin:17px 0}.table th{text-align:left;padding:9px 10px;background:#f8fafc;border-bottom:1px solid var(--l);font-size:10px;text-transform:uppercase;color:#6e7c90}.table td{padding:10px;border-bottom:1px solid #eef2f6;vertical-align:top;font-size:13px}.callout{margin:17px 0;padding:14px 16px;border:1px solid #cce9db;background:#effbf5;border-radius:12px;color:#385a4b}.warn{border-color:#f0dfac;background:#fff9e9;color:#705d26}.footer{padding:34px 0;color:#748398;font-size:12px}.footer a{margin-right:14px}@media(max-width:950px){:root{--side:230px}.content{padding:45px 34px 90px}.proof,.rollout{grid-template-columns:1fr 1fr}}@media(max-width:720px){.links a:not(.cta){display:none}.layout{display:block}aside{display:none}.content{padding:36px 20px 80px}.proof,.rollout,.grid{grid-template-columns:1fr}h1{font-size:47px}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"PropData Estonia API Documentation","dateModified":"2026-09-02","url":"https://ee.proptechusa.ai/docs","author":{"@type":"Organization","name":"PropTechUSA.ai","url":"https://proptechusa.ai/"},"about":{"@type":"SoftwareApplication","name":"PropData Estonia Property Intelligence API","applicationCategory":"DeveloperApplication","areaServed":{"@type":"Country","name":"Estonia"}}}</script>
+</head><body>
+<header class="top"><div class="topin"><a class="brand" href="/"><img src="/favicon.svg" alt=""><span><strong>PROPDATA</strong><small>ESTONIA DOCS</small></span></a><nav class="links"><a href="/">Product</a><a href="/#pricing">Pricing</a><a href="https://propdata.proptechusa.ai/">Global PropData</a><a href="mailto:sales@proptechusa.ai">Support</a><a class="cta" href="/#pricing">Get API Access</a></nav></div></header>
+<div class="layout"><aside>
+<div class="st">Start</div><a class="sl" href="#overview">Overview</a><a class="sl" href="#coverage">Coverage semantics</a><a class="sl" href="#auth">Authentication</a>
+<div class="st">Resolve</div><a class="sl" href="#address"><code>GET</code> Address</a><a class="sl" href="#parcel"><code>GET</code> Cadastral / parcel</a><a class="sl" href="#coords"><code>GET</code> Coordinates</a>
+<div class="st">Deep enrichment</div><a class="sl" href="#land">Land intelligence</a><a class="sl" href="#buildings">Building intelligence</a><a class="sl" href="#energy">Energy certificates</a><a class="sl" href="#documents">Permits & documents</a><a class="sl" href="#geometry">Geometry</a>
+<div class="st">Platform</div><a class="sl" href="#platform"><code>GET</code> Countries / health / stats / changelog</a><a class="sl" href="#errors">Errors</a><a class="sl" href="#sources">Sources</a>
+</aside><main class="content">
+<section class="hero" id="overview"><div class="badge"><i></i> ESTONIA · SOURCE-AWARE PROPERTY INTELLIGENCE</div><h1>From cadastral identity<br>to <span>property intelligence.</span></h1><p>PropData Estonia resolves addresses, native cadastral codes and coordinates into a governed property graph that can include official land attributes, assessed land value, parcel geometry, EHR building specifications, building footprints, energy certificates and document history.</p><div class="proof"><div><b>1.39M+</b><span>normalized addresses</span></div><div><b>778K+</b><span>land-enriched cadastral units</span></div><div><b>971K+</b><span>building ↔ parcel relationships</span></div><div><b>10.27M+</b><span>object ↔ address relationships</span></div></div></section>
+<section class="section" id="coverage"><h2>Coverage is a field, not a promise.</h2><p>Different Estonia layers populate independently. PropData exposes the source facts that are actually available for the resolved property and preserves explicit match/coverage semantics instead of synthesizing missing data.</p><div class="rollout"><div><small>NATIONAL · LIVE</small><b>Cadastral land</b><span>778,325 rows loaded: area, intended use, registration date and assessed land value. Ownership type and registered immovable number are present where published.</span></div><div><small>EXPANDING NATIONAL BASELINE</small><b>Parcel geometry</b><span>Whole-country geometry reconciliation is actively expanding materialized polygon coverage.</span></div><div><small>COVERAGE-AWARE</small><b>EHR buildings + history</b><span>Building specifications, footprints, energy and document history return where the EHR layer is populated; the national backfill is in progress.</span></div></div><div class="callout"><strong>Fail-closed source facts:</strong> unavailable or unverified facts remain unavailable. A 200 response does not mean every optional enrichment layer is present.</div></section>
+<section class="section" id="auth"><h2>Authentication</h2><p>Direct PropData requests use <code>x-api-key</code>. Keep direct production keys server-side. Marketplace requests use RapidAPI-provided credentials and should be routed through the Estonia-scoped marketplace integration.</p><div class="code"><div class="cb">Direct REST</div><pre>curl "https://propdata-api-worker.sales-fd3.workers.dev/v1/property?country=EE&parcel=78404:406:4330" \
+  -H "x-api-key: $PROPDATA_API_KEY"</pre></div></section>
+<section class="section" id="address"><h2>Address → property</h2><p>Resolve an official ADS address and attach the property graph beneath it where available.</p><div class="endpoint"><div class="eh"><span class="method">GET</span><span class="path">/v1/property?country=EE&amp;address=...</span></div><div class="ed"><div class="code"><pre>GET /v1/property?country=EE&address=Viljandi%20maakond%2C%20Mulgi%20vald%2C%20Abja-Paluoja%20linn%2C%20Pärnu%20mnt%2051a</pre></div><p>Address responses can expose <code>ADR_ID</code>, ADS code-address, lifecycle/source timestamps, source coordinates, hierarchy levels, related property objects and parcel attachment.</p></div></div></section>
+<section class="section" id="parcel"><h2>Cadastral code → deep property</h2><p>Use the native Estonian <strong>katastritunnus</strong> directly. Canonical PropData parcel IDs are also accepted.</p><div class="endpoint"><div class="eh"><span class="method">GET</span><span class="path">/v1/property?country=EE&amp;parcel=78404:406:4330</span></div><div class="ed"><div class="code"><div class="cb">Selected live response</div><pre>{
+  "country_code": "EE",
+  "match_level": "cadastral_code",
+  "coverage_status": "live_enriched",
+  "parcel": {
+    "global_parcel_id": "EE:MAARUUM:CADASTRE:ads_ky.10761487",
+    "geometry": {"type":"Polygon"}
   },
-  <span class="k">"related_objects"</span>: { <span class="k">"count"</span>: <span class="n">1</span>, <span class="k">"items"</span>: [ ... ] },
-  <span class="k">"property"</span>: { ... }
-}</pre></div>
-  </div></div>
-</section>
-
-<section class="section" id="cadastral">
-  <h2>Native cadastral code → property</h2>
-  <p>Estonia's native cadastral identifier — <strong>katastritunnus</strong> — is now a first-class lookup input. You do not need to know PropData's internal canonical parcel ID first.</p>
-  <div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/property?country=EE&amp;parcel=29601:014:0290</span><span class="desc">Native cadastral lookup</span></div><div class="endpoint-body">
-    <table class="params"><thead><tr><th>Parameter</th><th>Status</th><th>Description</th></tr></thead><tbody><tr><td>country</td><td><span class="req">required</span></td><td>Set to <code>EE</code>.</td></tr><tr><td>parcel</td><td><span class="req">required</span></td><td>Native Estonian cadastral code or canonical PropData parcel ID.</td></tr></tbody></table>
-    <div class="live-example"><div class="live-example-label">LIVE VERIFIED GRAPH</div><h3>29601:014:0290 → Raba tn 40 // 42</h3><p>This parcel resolves to polygon geometry, two official addresses and a linked residential building with EHR code <strong>121265003</strong>.</p><div class="chips"><span class="chip">match_level=cadastral_code</span><span class="chip">2 related addresses</span><span class="chip">1 linked building</span><span class="chip">EHR 121265003</span><span class="chip">Polygon</span></div></div>
-    <div class="codebox"><div class="codebar"><span>Selected response fields</span><span>live canary</span></div><pre>{
-  <span class="k">"match_level"</span>: <span class="s">"cadastral_code"</span>,
-  <span class="k">"parcel"</span>: {
-    <span class="k">"global_parcel_id"</span>: <span class="s">"EE:MAARUUM:CADASTRE:ads_ky.10477142"</span>,
-    <span class="k">"parcel_id"</span>: <span class="s">"ads_ky.10477142"</span>,
-    <span class="k">"centroid"</span>: { <span class="k">"type"</span>: <span class="s">"Point"</span> },
-    <span class="k">"geometry"</span>: { <span class="k">"type"</span>: <span class="s">"Polygon"</span> }
-  },
-  <span class="k">"estonia"</span>: {
-    <span class="k">"native_identity"</span>: {
-      <span class="k">"cadastral_code"</span>: <span class="s">"29601:014:0290"</span>,
-      <span class="k">"ads_oid"</span>: <span class="s">"CU00140341"</span>,
-      <span class="k">"adob_id"</span>: <span class="s">"10477142"</span>,
-      <span class="k">"object_class_name"</span>: <span class="s">"cadastral_parcel"</span>
+  "estonia": {
+    "land": {
+      "cadastral_code": "78404:406:4330",
+      "area_sqm": 600,
+      "intended_uses": [{"use":"ELAMUMAA","percent":100}],
+      "ownership_type": "Eraomand",
+      "assessed_land_value_eur": 123108,
+      "registered_immovable_number": "3298301"
     },
-    <span class="k">"related_addresses"</span>: { <span class="k">"count"</span>: <span class="n">2</span>, <span class="k">"items"</span>: [ ... ] },
-    <span class="k">"building_relationships"</span>: {
-      <span class="k">"count"</span>: <span class="n">1</span>,
-      <span class="k">"items"</span>: [{
-        <span class="k">"object_class_name"</span>: <span class="s">"residential_building"</span>,
-        <span class="k">"ehr_code"</span>: <span class="s">"121265003"</span>,
-        <span class="k">"ads_oid"</span>: <span class="s">"EE02672989"</span>,
-        <span class="k">"full_address"</span>: <span class="s">"Harju maakond, Keila linn, Raba tn 40"</span>
-      }]
-    }
+    "ehr_buildings": [{
+      "ehr_code": "101000361",
+      "first_usage_year": 1956,
+      "dimensions": {"floors_count":2,"closed_net_area_sqm":113},
+      "energy_certificate_history": {"count":1},
+      "documents": {"count":14}
+    }]
   }
-}</pre></div>
-  </div></div>
-</section>
-
-<section class="section" id="canonical">
-  <h2>Canonical parcel → property</h2>
-  <p>Every materialized parcel has a stable PropData canonical identity. This is useful when you persist a resolved property and want deterministic re-fetching later.</p>
-  <div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/property?country=EE&amp;parcel=ads_ky.10477142</span><span class="desc">Canonical property identity</span></div><div class="endpoint-body"><div class="codebox"><pre>GET /v1/property?country=EE&amp;parcel=ads_ky.10477142</pre></div><p>Canonical lookup and native cadastral lookup converge on the same underlying property record. The native identifier remains visible in <code>estonia.native_identity.cadastral_code</code>.</p></div></div>
-</section>
-
-<section class="section" id="location">
-  <h2>Coordinates → property</h2>
-  <p>Resolve latitude/longitude directly into the containing parcel. This preserves spatial truth and avoids pretending that every coordinate has an exact address-string equivalent.</p>
-  <div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/property/by-location?country=EE&amp;lat=...&amp;lng=...</span><span class="desc">Point-in-polygon resolution</span></div><div class="endpoint-body">
-    <table class="params"><thead><tr><th>Parameter</th><th>Status</th><th>Description</th></tr></thead><tbody><tr><td>country</td><td><span class="req">required</span></td><td>Set to <code>EE</code>.</td></tr><tr><td>lat</td><td><span class="req">required</span></td><td>Latitude in decimal degrees.</td></tr><tr><td>lng</td><td><span class="req">required</span></td><td>Longitude in decimal degrees.</td></tr></tbody></table>
-    <div class="codebox"><div class="codebar"><span>Verified example</span><span>WGS84</span></div><pre>GET /v1/property/by-location?country=EE&amp;lat=58.12511901&amp;lng=25.34680635</pre></div>
-    <div class="callout green"><strong>Verified:</strong> this coordinate resolves to <code>EE:MAARUUM:CADASTRE:ads_ky.10290090</code> with polygon geometry and <code>coverage_status=live_enriched</code>.</div>
-  </div></div>
-</section>
-
-<section class="section" id="native">
-  <h2>Estonia-native identity</h2>
-  <p>PropData keeps the identifiers that matter in Estonia instead of replacing them with made-up U.S.-style fields.</p>
-  <div class="field-grid">
-    <div class="field-card"><b><code>cadastral_code</code></b><p>Native Estonian katastritunnus, for example <code>29601:014:0290</code>.</p></div>
-    <div class="field-card"><b><code>ads_oid</code></b><p>ADS source-object identity such as <code>CU00140341</code> or a building object OID.</p></div>
-    <div class="field-card"><b><code>adob_id</code></b><p>ADS object-version/source-record identity retained by the normalized graph.</p></div>
-    <div class="field-card"><b><code>adr_id</code></b><p>Official ADS address identity attached to normalized address records.</p></div>
-    <div class="field-card"><b><code>code_address</code></b><p>Official structured ADS code-address value where present.</p></div>
-    <div class="field-card"><b><code>ehr_code</code></b><p>Building Register code where the building ↔ parcel source relationship supplies it.</p></div>
-    <div class="field-card"><b><code>global_*_id</code></b><p>Stable PropData identity across address, object and parcel layers.</p></div>
-    <div class="field-card"><b><code>source_revision</code></b><p>Source revision context attached to the normalized Estonia parcel layer.</p></div>
-  </div>
-</section>
-
-<section class="section" id="address-graph">
-  <h2>Address hierarchy & lifecycle</h2>
-  <p>Estonia's address response now exposes the underlying ADS hierarchy instead of only a formatted string. This is useful for search, normalization, jurisdiction logic and AI systems that need structured locality context.</p>
-  <div class="graph"><div class="graph-row"><div class="node"><b>Viljandi maakond</b><small>level 1 · county</small></div><span class="arrow">→</span><div class="node"><b>Mulgi vald</b><small>level 2 · municipality</small></div><span class="arrow">→</span><div class="node"><b>Abja-Paluoja linn</b><small>level 3</small></div><span class="arrow">→</span><div class="node"><b>Pärnu mnt</b><small>level 5 · thoroughfare</small></div><span class="arrow">→</span><div class="node"><b>51a</b><small>level 7 · address number</small></div></div><div class="graph-note">Each populated hierarchy entry can include <code>level</code>, <code>id</code>, <code>code</code>, <code>name</code> and <code>long_name</code>. Unused levels remain explicit nulls.</div></div>
-  <div class="semantics"><div class="semantic"><code>address_lifecycle</code><p>Normalized lifecycle state such as <code>Current</code>.</p></div><div class="semantic"><code>validity.valid_from</code><p>Source validity timestamp retained from ADS.</p></div><div class="semantic"><code>validity.source_updated_at</code><p>Source update stamp, distinct from PropData fetch time.</p></div><div class="semantic"><code>source_coordinates</code><p>Original source coordinate system details alongside WGS84 latitude/longitude.</p></div></div>
-</section>
-
-<section class="section" id="objects">
-  <h2>Property objects</h2>
-  <p>The national graph contains multiple ADS object classes. Address responses can return related objects directly, while parcel responses expose the parcel object and linked building graph.</p>
-  <div class="class-table">
-    <div class="class-pill"><code>CU</code><span>cadastral parcel</span></div><div class="class-pill"><code>EE</code><span>residential building</span></div><div class="class-pill"><code>ME</code><span>non-residential building</span></div><div class="class-pill"><code>ER</code><span>dwelling</span></div><div class="class-pill"><code>MR</code><span>other building part</span></div><div class="class-pill"><code>LP</code><span>thoroughfare</span></div><div class="class-pill"><code>AY</code><span>settlement unit</span></div><div class="class-pill"><code>VK</code><span>address area</span></div><div class="class-pill"><code>OV / MK / LO</code><span>administrative/address hierarchy objects</span></div>
-  </div>
-  <div class="callout"><strong>Graph-scale note:</strong> the current Estonia property-object layer contains 2.44M+ objects, while object ↔ address relationships exceed 10.27M. These counts describe different graph layers and are not interchangeable with parcel polygon counts.</div>
-</section>
-
-<section class="section" id="buildings">
-  <h2>Building ↔ parcel relationships</h2>
-  <p>Estonia's parcel enrichment now attaches the official building relationship graph where available. Each linked building can carry ADS identity, object class/status, coordinates, related addresses, ETak identifiers and an EHR building code.</p>
-  <div class="field-grid"><div class="field-card"><b><code>building_relationships.count</code></b><p>Total linked buildings found for the native cadastral parcel.</p></div><div class="field-card"><b><code>ehr_code</code></b><p>Building Register identity from the source relationship extract when present.</p></div><div class="field-card"><b><code>relationship_priority</code></b><p>Source relationship priority retained from the building ↔ cadastral relation.</p></div><div class="field-card"><b><code>addresses[]</code></b><p>Official addresses explicitly linked to that building object.</p></div></div>
-</section>
-
-<section class="section" id="semantics">
-  <h2>Response semantics</h2>
-  <p>PropData is source-aware. A successful HTTP response is not permission to assume every optional fact exists.</p>
-  <div class="semantics"><div class="semantic"><code>match_level</code><p>How the input resolved: <code>address_to_parcel</code>, <code>address</code>, <code>cadastral_code</code>, <code>parcel_id</code> or <code>coordinate</code>.</p></div><div class="semantic"><code>coverage_status</code><p>Explicit state for the relevant data layer, such as <code>live_enriched</code> or address-only coverage.</p></div><div class="semantic"><code>parcel_resolution</code><p>Whether an address request successfully attached a parcel.</p></div><div class="semantic"><code>source / provenance</code><p>Source context travels with the property fact instead of disappearing during normalization.</p></div></div>
-  <div class="callout green"><strong>Fail-closed facts:</strong> if the official source does not publish or verify a field, PropData keeps it unavailable rather than fabricating a value.</div>
-</section>
-
-<section class="section" id="countries"><h2>Country registry</h2><p>Inspect PropData's country-aware property framework and adapter status.</p><div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/countries</span><span class="desc">Country capabilities</span></div><div class="endpoint-body"><div class="codebox"><pre>GET /v1/countries</pre></div><p>The broader PropData platform currently operates five source-native property identity footprints: United States, Great Britain, New Zealand, Australia and Estonia. Layer-level availability remains country-specific.</p></div></div></section>
-<section class="section" id="health"><h2>Health</h2><p>Public production API health.</p><div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/health</span><span class="desc">Service health</span></div><div class="endpoint-body"><div class="codebox"><pre>GET /v1/health</pre></div></div></div></section>
-<section class="section" id="stats"><h2>Platform stats</h2><p>Public system statistics and platform proof points. Use per-request coverage fields, not global stats, to interpret an individual property.</p><div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/stats</span><span class="desc">System statistics</span></div><div class="endpoint-body"><div class="codebox"><pre>GET /v1/stats</pre></div></div></div></section>
-<section class="section" id="changelog"><h2>Changelog</h2><p>Public production changes to the PropData API and underlying data platform.</p><div class="endpoint"><div class="endpoint-head"><span class="method">GET</span><span class="path">/v1/changelog</span><span class="desc">Production changes</span></div><div class="endpoint-body"><div class="codebox"><pre>GET /v1/changelog</pre></div></div></div></section>
-
-<section class="section" id="errors"><h2>Errors, quotas & retries</h2><p>Handle validation, authentication, resolution, quota and infrastructure failures separately.</p><table class="params"><thead><tr><th>Status</th><th>Meaning</th><th>Recommended behavior</th></tr></thead><tbody><tr><td>400</td><td>Invalid request</td><td>Correct parameters before retrying.</td></tr><tr><td>401</td><td>Authentication failed</td><td>Check RapidAPI or direct credentials.</td></tr><tr><td>404 / no_match</td><td>No matching resource</td><td>Treat as a resolution outcome, not a service outage.</td></tr><tr><td>429</td><td>Rate/quota exceeded</td><td>Honor <code>Retry-After</code> and subscription limits.</td></tr><tr><td>5xx</td><td>Server/upstream failure</td><td>Retry with bounded exponential backoff.</td></tr></tbody></table></section>
-
-<section class="section" id="sources"><h2>Sources & provenance</h2><p>PropData Estonia is built from official national address and cadastral source systems from Maa- ja Ruumiamet (Estonian Land and Spatial Development Board), including ADS address/object identity and official building ↔ cadastral relationships. PropData maintains the ingestion, normalization, identity resolution, spatial processing and developer contract above those source systems.</p><div class="workflow-grid"><div class="workflow"><span>01 · SOURCE</span><b>Official Estonia records</b><p>ADS addresses and objects, national cadastral identity, geometry and source relationships.</p></div><div class="workflow"><span>02 · NORMALIZE</span><b>PropData property graph</b><p>Stable IDs, native identifiers, explicit relationships, lifecycle and provenance.</p></div><div class="workflow"><span>03 · DELIVER</span><b>Production API</b><p>REST delivery with authentication, quotas, coverage semantics and additive enrichment.</p></div></div><p><a href="https://www.maaruum.ee/en" target="_blank" rel="noopener">Maa- ja Ruumiamet ↗</a></p></section>
-
-<section class="section" id="rapidapi"><h2>RapidAPI distribution</h2><p>The Estonia API is also distributed through RapidAPI for marketplace discovery and self-serve evaluation. RapidAPI subscription credentials are separate from direct PropData API keys.</p><div class="rapid"><h3>Use 20 calls to verify the real product.</h3><p>The free RapidAPI allowance is intentionally small. Test real address, cadastral and coordinate resolution, inspect the Estonia graph, then move to a paid tier for production workloads.</p><a href="/#pricing">See Estonia plans</a></div></section>
-
-<footer class="footer"><strong>PropData Estonia · Property & Cadastral API</strong><div class="footer-links"><a href="https://proptechusa.ai/">PropTechUSA.ai</a><a href="https://propdata.proptechusa.ai/">PropData</a><a href="https://global.proptechusa.ai/">Global</a><a href="https://data.proptechusa.ai/">Data</a><a href="mailto:sales@proptechusa.ai">sales@proptechusa.ai</a></div></footer>
-</main></div>
-</body>
-</html>
+}</pre></div></div></div></section>
+<section class="section" id="coords"><h2>Coordinates → property</h2><p>Resolve WGS84 coordinates to the containing Estonia parcel without requiring an address-string match.</p><div class="endpoint"><div class="eh"><span class="method">GET</span><span class="path">/v1/property/by-location?country=EE&amp;lat=...&amp;lng=...</span></div><div class="ed"><div class="code"><pre>GET /v1/property/by-location?country=EE&lat=58.12511901&lng=25.34680635</pre></div></div></div></section>
+<section class="section" id="deep-enrichment"><h2>Deep Estonia response contract</h2><p>The enrichment model is additive. Existing property identity fields remain stable while Estonia-specific source layers attach below <code>estonia</code>.</p><div class="grid"><div class="card"><b><code>estonia.native_identity</code></b><p>Cadastral code, ADS OID, ADOB ID, canonical/global parcel IDs and source revision.</p></div><div class="card"><b><code>estonia.land</code></b><p>National cadastral attributes including land use, area, assessed value, ownership type and registered immovable number.</p></div><div class="card"><b><code>estonia.building_relationships</code></b><p>ADS building ↔ parcel identity and explicit linked addresses.</p></div><div class="card"><b><code>estonia.ehr_buildings[]</code></b><p>Construction Register physical/technical enrichment and building-level history.</p></div></div></section>
+<section class="section" id="land"><h2>Land intelligence</h2><p>The national cadastral export enriches the CU graph with typed land/property attributes.</p><table class="table"><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr><td><code>area_sqm</code></td><td>Official cadastral area.</td></tr><tr><td><code>intended_uses[]</code></td><td>Up to three official intended-use classifications with percentages.</td></tr><tr><td><code>land_cover</code></td><td>Cultivated, natural grassland, forest, courtyard and other area where published.</td></tr><tr><td><code>ownership_type</code></td><td>Official ownership category such as private/state ownership — not named owner identity.</td></tr><tr><td><code>assessed_land_value_eur</code></td><td>Official assessed land value in EUR; not PropData market AVM.</td></tr><tr><td><code>registered_immovable_number</code></td><td>Registered-immovable reference where published.</td></tr><tr><td><code>registration_date / modified_date</code></td><td>Official cadastral registration/change dates.</td></tr><tr><td><code>last_change_reason / legal_basis_last_change</code></td><td>Source reason and legal basis for last cadastral change where supplied.</td></tr></tbody></table></section>
+<section class="section" id="buildings"><h2>EHR building intelligence</h2><p>For populated EHR-linked buildings, PropData can return current physical/technical state alongside stable EHR identity.</p><div class="grid"><div class="card"><b><code>first_usage_year</code></b><p>First-use year where published.</p></div><div class="card"><b><code>dimensions</code></b><p>Floors, closed net area, footprint, gross volume and other typed dimensions when present.</p></div><div class="card"><b><code>primary_use / uses</code></b><p>EHR building-use classification and underlying use records.</p></div><div class="card"><b><code>construction_materials</code></b><p>Foundation, structural, wall, roof/ceiling and finish materials from EHR technical indicators.</p></div><div class="card"><b><code>technical_systems</code></b><p>Electricity, water, sewer, heating, heat source, energy carrier, ventilation/cooling/gas context where published.</p></div><div class="card"><b>Building footprint</b><p>EHR building spatial shape normalized to WGS84 where the source geometry is available.</p></div></div></section>
+<section class="section" id="energy"><h2>Energy certificates</h2><p>Energy data attaches to the linked EHR building when published.</p><div class="code"><pre>"energy_certificate_history": {
+  "count": 1,
+  "items": [{
+    "document_number": "1711567/00915",
+    "eta_kek_type": "KEK",
+    "eta_kek_value": 238,
+    "energy_class": "ENERGIAKL_E",
+    "valid_from": "2017-06-01",
+    "valid_to": "2027-05-31"
+  }]
+}</pre></div></section>
+<section class="section" id="documents"><h2>Permits & document history</h2><p>The EHR document layer is normalized into a building timeline instead of forcing clients to parse Estonian document types themselves.</p><div class="grid"><div class="card"><b><code>building_permit</code></b><p>Issued building permit events.</p></div><div class="card"><b><code>building_permit_application</code></b><p>Permit applications kept distinct from issued permits.</p></div><div class="card"><b><code>occupancy_permit / use_notice</code></b><p>Occupancy/use authorization and notification records.</p></div><div class="card"><b><code>construction_start_notice</code></b><p>Construction-start notification events.</p></div><div class="card"><b><code>design_conditions</code></b><p>Design-condition records when returned by EHR.</p></div><div class="card"><b><code>restriction_notice</code></b><p>Building restriction/arrest notice events. These are historical document events, not a substitute for current land-register rights.</p></div></div></section>
+<section class="section" id="geometry"><h2>Parcel + building geometry</h2><p>Parcel and building geometry are distinct layers. Parcel geometry comes from national cadastral sources; building footprints come from EHR when available. Both are normalized to GeoJSON-compatible WGS84 output.</p><div class="warn callout"><strong>Coverage matters:</strong> national parcel geometry reconciliation is actively running. Treat the presence of geometry in the response as authoritative for that property; do not infer polygon absence from a missing value until the layer's coverage status is checked.</div></section>
+<section class="section" id="platform"><h2>Platform endpoints</h2><table class="table"><thead><tr><th>Route</th><th>Purpose</th></tr></thead><tbody><tr><td><code>GET /v1/countries</code></td><td>Country-aware adapter/capability registry.</td></tr><tr><td><code>GET /v1/health</code></td><td>Public API health.</td></tr><tr><td><code>GET /v1/stats</code></td><td>Public platform statistics; not a replacement for per-property coverage fields.</td></tr><tr><td><code>GET /v1/changelog</code></td><td>Production platform changes.</td></tr></tbody></table></section>
+<section class="section" id="errors"><h2>Errors & retries</h2><table class="table"><thead><tr><th>Status</th><th>Meaning</th><th>Behavior</th></tr></thead><tbody><tr><td>400</td><td>Invalid request</td><td>Correct inputs before retry.</td></tr><tr><td>401</td><td>Authentication failure</td><td>Check RapidAPI/direct credentials.</td></tr><tr><td>404 / no_match</td><td>No resolved resource</td><td>Treat as a resolution outcome.</td></tr><tr><td>429</td><td>Quota/rate limit</td><td>Honor plan limits and Retry-After.</td></tr><tr><td>5xx</td><td>Server/upstream failure</td><td>Bounded exponential retry.</td></tr></tbody></table></section>
+<section class="section" id="sources"><h2>Official sources & provenance</h2><p>Core Estonia source systems include <strong>Maa- ja Ruumiamet</strong> for ADS/cadastral data and the <strong>Estonia Register of Construction Works (EHR)</strong> for building, energy and document intelligence. PropData is an independent normalization/delivery platform and is not operated by the Estonian government.</p><div class="dark"><h3>Land-register rights are a separate layer.</h3><p>Named owners, mortgages and current registered restrictions belong to the RIK e-Land Register access model and are not represented by the open cadastral ownership-type field or historical EHR owner/restriction notices. PropData keeps that boundary explicit.</p><a href="mailto:sales@proptechusa.ai">Enterprise / legal-data inquiries →</a></div></section>
+<footer class="footer"><strong>PropData Estonia</strong><p>Source-aware property intelligence for Estonia.</p><a href="/">Product</a><a href="/#pricing">Pricing</a><a href="https://propdata.proptechusa.ai/">Global PropData</a><a href="mailto:sales@proptechusa.ai">sales@proptechusa.ai</a></footer>
+</main></div></body></html>
