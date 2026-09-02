@@ -1,0 +1,519 @@
+openapi: 3.0.2
+info:
+  title: Estonia Property Intelligence - PropData
+  version: 1.2.0
+  description: >-
+    Estonia-native property intelligence by PropData. Resolve official addresses,
+    native cadastral codes, canonical parcel identities, and coordinates into
+    source-aware property context. Responses can include national cadastral land
+    attributes, assessed land value, registered-immovable reference, available
+    parcel geometry, ADS identity, building-to-parcel relationships, EHR building
+    specifications, available building footprints, energy certificate history,
+    normalized permit/document history, and provenance. Optional fields vary by
+    source coverage; missing source facts are not fabricated.
+  contact:
+    name: PropData Sales & Support
+    email: sales@proptechusa.ai
+    url: https://ee.proptechusa.ai/
+  termsOfService: https://ee.proptechusa.ai/
+servers:
+  - url: https://propdata-api-worker.sales-fd3.workers.dev
+    description: PropData production API
+tags:
+  - name: Property
+    description: Address, cadastral-code, and canonical property resolution.
+  - name: Location
+    description: Coordinate-to-property resolution.
+  - name: Platform
+    description: Country capabilities and public platform information.
+  - name: Operations
+    description: Health and production change information.
+paths:
+  /v1/property:
+    get:
+      tags: [Property]
+      operationId: lookupEstoniaProperty
+      summary: Resolve an Estonia property
+      description: >-
+        Resolve an Estonia property using either an official address, a native
+        Estonian cadastral code (katastritunnus), or a canonical PropData parcel ID.
+        Set country=EE and provide one lookup input. Depending on source coverage,
+        the response can include land intelligence, parcel geometry, ADS identities,
+        linked EHR buildings, building specifications, energy certificates, and
+        permit/document history.
+      parameters:
+        - $ref: '#/components/parameters/CountryEE'
+        - name: address
+          in: query
+          required: false
+          description: Full official/formatted Estonian address. Use when parcel is not supplied.
+          schema: {type: string, minLength: 3}
+          example: Viljandi maakond, Mulgi vald, Abja-Paluoja linn, Pärnu mnt 51a
+        - name: parcel
+          in: query
+          required: false
+          description: Native Estonian cadastral code or canonical PropData parcel identity.
+          schema: {type: string, minLength: 1}
+          examples:
+            nativeCadastralCode: {value: "78404:406:4330"}
+            canonicalParcel: {value: "ads_ky.10761487"}
+      responses:
+        '200':
+          description: Source-aware Estonia property resolution.
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PropertyResponse'}
+              examples:
+                deepProperty:
+                  summary: Cadastral property with land, EHR building, energy and documents
+                  value:
+                    country_code: EE
+                    match_level: cadastral_code
+                    coverage_status: live_enriched
+                    parcel:
+                      global_parcel_id: EE:MAARUUM:CADASTRE:ads_ky.10761487
+                      parcel_id: ads_ky.10761487
+                      geometry: {type: Polygon}
+                    estonia:
+                      native_identity:
+                        cadastral_code: "78404:406:4330"
+                        ads_oid: CU00460380
+                        adob_id: "10761487"
+                      land:
+                        cadastral_code: "78404:406:4330"
+                        area_sqm: 600
+                        intended_uses:
+                          - {use: ELAMUMAA, percent: 100}
+                        ownership_type: Eraomand
+                        assessed_land_value_eur: 123108
+                        registered_immovable_number: "3298301"
+                        registration_date: "2000-09-18"
+                        modified_date: "2023-10-06"
+                        source: Maa- ja Ruumiamet
+                      ehr_buildings:
+                        - ehr_code: "101000361"
+                          global_building_id: EE:EHR:101000361
+                          full_address: Harju maakond, Tallinn, Nõmme linnaosa, Leina tn 13
+                          first_usage_year: 1956
+                          primary_use: {code: "11101", text: Üksikelamu}
+                          dimensions:
+                            floors_count: 2
+                            footprint_area_sqm: 92
+                            closed_net_area_sqm: 113
+                            gross_volume_cubic_m: 532
+                          energy_certificate_history:
+                            count: 1
+                            returned: 1
+                            truncated: false
+                            items:
+                              - document_number: 1711567/00915
+                                eta_kek_type: KEK
+                                eta_kek_value: 238
+                                energy_class: ENERGIAKL_E
+                                valid_from: "2017-06-01"
+                                valid_to: "2027-05-31"
+                          documents:
+                            count: 14
+                            returned: 14
+                            truncated: false
+                            scanned: true
+                            items:
+                              - document_id: 9522946
+                                document_type_id: 12229
+                                document_type: Ehitusluba ehitise laiendamiseks
+                                document_number: "36591"
+                                category: building_permit
+                                state_text: Registrisse kantud
+                                date: "2009-02-02T22:00:00+00:00"
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '500': {$ref: '#/components/responses/ServerError'}
+  /v1/property/by-location:
+    get:
+      tags: [Location]
+      operationId: resolveEstoniaPropertyByCoordinates
+      summary: Resolve Estonia coordinates to property
+      description: Resolve WGS84 coordinates to containing Estonia parcel context with available source-aware enrichment.
+      parameters:
+        - $ref: '#/components/parameters/CountryEE'
+        - name: lat
+          in: query
+          required: true
+          schema: {type: number, format: double, minimum: -90, maximum: 90}
+          example: 58.12511901
+        - name: lng
+          in: query
+          required: true
+          schema: {type: number, format: double, minimum: -180, maximum: 180}
+          example: 25.34680635
+      responses:
+        '200':
+          description: Coordinate-to-property resolution.
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PropertyResponse'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '500': {$ref: '#/components/responses/ServerError'}
+  /v1/countries:
+    get:
+      tags: [Platform]
+      operationId: getCountryCapabilities
+      summary: Country capabilities
+      responses:
+        '200':
+          description: Country registry.
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '500': {$ref: '#/components/responses/ServerError'}
+  /v1/health:
+    get:
+      tags: [Operations]
+      operationId: getHealth
+      summary: API health
+      responses:
+        '200':
+          description: API health result.
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '500': {$ref: '#/components/responses/ServerError'}
+  /v1/stats:
+    get:
+      tags: [Platform]
+      operationId: getPlatformStats
+      summary: Platform statistics
+      description: Public platform statistics; per-property coverage fields remain authoritative.
+      responses:
+        '200':
+          description: Public platform statistics.
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '500': {$ref: '#/components/responses/ServerError'}
+  /v1/changelog:
+    get:
+      tags: [Operations]
+      operationId: getChangelog
+      summary: Production changelog
+      responses:
+        '200':
+          description: Changelog.
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '500': {$ref: '#/components/responses/ServerError'}
+components:
+  parameters:
+    CountryEE:
+      name: country
+      in: query
+      required: true
+      description: Estonia country scope. Set to EE.
+      schema: {type: string, enum: [EE], default: EE}
+      example: EE
+  schemas:
+    PropertyResponse:
+      type: object
+      additionalProperties: true
+      description: Source-aware property resolution. Exact fields vary by lookup mode and source coverage.
+      properties:
+        country_code: {type: string, enum: [EE]}
+        match_level: {type: string, nullable: true}
+        coverage_status: {type: string, nullable: true}
+        parcel_resolution: {type: string, nullable: true}
+        address: {$ref: '#/components/schemas/EstoniaAddress'}
+        related_objects: {type: object, nullable: true, additionalProperties: true}
+        parcel: {$ref: '#/components/schemas/Parcel'}
+        estonia: {$ref: '#/components/schemas/EstoniaEnrichment'}
+        property:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Nested property result used by some address-resolution responses.
+        provenance: {type: object, nullable: true, additionalProperties: true}
+    EstoniaAddress:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        global_address_id: {type: string, nullable: true}
+        address_id: {type: string, nullable: true}
+        full_address: {type: string, nullable: true}
+        postcode: {type: string, nullable: true}
+        latitude: {type: number, format: double, nullable: true}
+        longitude: {type: number, format: double, nullable: true}
+        address_lifecycle: {type: string, nullable: true}
+        native_identity: {type: object, nullable: true, additionalProperties: true}
+        validity: {type: object, nullable: true, additionalProperties: true}
+        source_coordinates: {type: object, nullable: true, additionalProperties: true}
+        hierarchy_levels:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+    Parcel:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        global_parcel_id: {type: string, nullable: true}
+        parcel_id: {type: string, nullable: true}
+        centroid: {$ref: '#/components/schemas/GeoJSONGeometry'}
+        geometry: {$ref: '#/components/schemas/GeoJSONGeometry'}
+        bbox:
+          type: array
+          nullable: true
+          items: {type: number}
+        source: {type: string, nullable: true}
+        fetched_at: {type: string, nullable: true}
+    EstoniaEnrichment:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        native_identity: {$ref: '#/components/schemas/NativeIdentity'}
+        land: {$ref: '#/components/schemas/LandIntelligence'}
+        parcel_object: {type: object, nullable: true, additionalProperties: true}
+        source_address: {type: object, nullable: true, additionalProperties: true}
+        related_addresses: {type: object, nullable: true, additionalProperties: true}
+        building_relationships: {type: object, nullable: true, additionalProperties: true}
+        ehr_buildings:
+          type: array
+          nullable: true
+          description: Deep EHR enrichment for populated linked buildings.
+          items: {$ref: '#/components/schemas/EHRBuilding'}
+        land_register:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Separate contract-gated RIK layer; named owners and mortgages are not implied by ownership_type.
+    NativeIdentity:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        cadastral_code: {type: string, nullable: true}
+        ads_oid: {type: string, nullable: true}
+        adob_id: {type: string, nullable: true}
+        canonical_parcel_id: {type: string, nullable: true}
+        global_parcel_id: {type: string, nullable: true}
+        object_class: {type: string, nullable: true}
+        object_class_name: {type: string, nullable: true}
+        source_revision: {type: string, nullable: true}
+    LandIntelligence:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: Official cadastral land attributes.
+      properties:
+        cadastral_code: {type: string, nullable: true}
+        area_sqm: {type: number, nullable: true}
+        intended_uses:
+          type: array
+          nullable: true
+          items: {$ref: '#/components/schemas/IntendedUse'}
+        land_cover: {$ref: '#/components/schemas/LandCover'}
+        registered_immovable_number: {type: string, nullable: true}
+        ownership_type:
+          type: string
+          nullable: true
+          description: Official ownership category, not named owner identity.
+        assessed_land_value_eur:
+          type: number
+          nullable: true
+          description: Official assessed land value in EUR; not a market AVM.
+        registration_date: {type: string, format: date, nullable: true}
+        modified_date: {type: string, format: date, nullable: true}
+        last_change_reason: {type: string, nullable: true}
+        legal_basis_last_change: {type: string, nullable: true}
+        notes: {type: string, nullable: true}
+        ads_oid: {type: string, nullable: true}
+        adob_id: {type: string, nullable: true}
+        export_date: {type: string, format: date, nullable: true}
+        source_revision: {type: string, nullable: true}
+        source: {type: string, nullable: true}
+    IntendedUse:
+      type: object
+      additionalProperties: true
+      properties:
+        use: {type: string, nullable: true}
+        percent: {type: number, nullable: true}
+    LandCover:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        cultivated_sqm: {type: number, nullable: true}
+        natural_grassland_sqm: {type: number, nullable: true}
+        forest_sqm: {type: number, nullable: true}
+        courtyard_sqm: {type: number, nullable: true}
+        other_sqm: {type: number, nullable: true}
+    EHRBuilding:
+      type: object
+      additionalProperties: true
+      properties:
+        ehr_code: {type: string, nullable: true}
+        global_building_id: {type: string, nullable: true}
+        building_name: {type: string, nullable: true}
+        full_address: {type: string, nullable: true}
+        status: {$ref: '#/components/schemas/CodeText'}
+        building_kind: {$ref: '#/components/schemas/CodeText'}
+        ownership_type: {$ref: '#/components/schemas/CodeText'}
+        first_usage_year: {type: integer, nullable: true}
+        primary_use: {$ref: '#/components/schemas/CodeText'}
+        dimensions: {$ref: '#/components/schemas/BuildingDimensions'}
+        uses:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        technical_indicators:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        technical_systems:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        construction_materials:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        source_addresses:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        source_cadastral_units:
+          type: array
+          nullable: true
+          items: {type: object, additionalProperties: true}
+        energy_certificate_history: {$ref: '#/components/schemas/EnergyCertificateHistory'}
+        documents: {$ref: '#/components/schemas/DocumentHistory'}
+        relationship_priority: {type: integer, nullable: true}
+        source: {type: string, nullable: true}
+    BuildingDimensions:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        floors_count: {type: integer, nullable: true}
+        footprint_area_sqm: {type: number, nullable: true}
+        closed_net_area_sqm: {type: number, nullable: true}
+        gross_volume_cubic_m: {type: number, nullable: true}
+        residential_area_sqm: {type: number, nullable: true}
+        non_residential_area_sqm: {type: number, nullable: true}
+    EnergyCertificateHistory:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        count: {type: integer}
+        returned: {type: integer}
+        truncated: {type: boolean}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/EnergyCertificate'}
+    EnergyCertificate:
+      type: object
+      additionalProperties: true
+      properties:
+        document_number: {type: string, nullable: true}
+        document_type_id: {type: integer, nullable: true}
+        eta_kek_type: {type: string, nullable: true}
+        eta_kek_value: {type: number, nullable: true}
+        energy_class: {type: string, nullable: true}
+        certificate_status: {type: string, nullable: true}
+        valid_from: {type: string, format: date, nullable: true}
+        valid_to: {type: string, format: date, nullable: true}
+        building_address: {type: string, nullable: true}
+        source: {type: string, nullable: true}
+    DocumentHistory:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        count: {type: integer}
+        returned: {type: integer}
+        truncated: {type: boolean}
+        scanned: {type: boolean}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/EHRDocument'}
+    EHRDocument:
+      type: object
+      additionalProperties: true
+      properties:
+        document_id: {type: integer, nullable: true}
+        document_type_id: {type: integer, nullable: true}
+        document_type: {type: string, nullable: true}
+        document_number: {type: string, nullable: true}
+        document_file_id: {type: integer, nullable: true}
+        state: {type: string, nullable: true}
+        state_text: {type: string, nullable: true}
+        date: {type: string, nullable: true}
+        category:
+          type: string
+          nullable: true
+          description: Normalized PropData document category.
+        source: {type: string, nullable: true}
+    CodeText:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        code: {type: string, nullable: true}
+        text: {type: string, nullable: true}
+    GeoJSONGeometry:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        type: {type: string, nullable: true}
+        coordinates: {nullable: true}
+    ErrorResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        error: {type: string, nullable: true}
+        message: {type: string, nullable: true}
+        status: {type: integer, nullable: true}
+        code: {type: string, nullable: true}
+        coverage_status: {type: string, nullable: true}
+  responses:
+    BadRequest:
+      description: Invalid request or missing lookup input.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    Unauthorized:
+      description: Request authentication failed.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    NotFound:
+      description: No matching resource was found.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    RateLimited:
+      description: Subscription quota or rate limit exceeded.
+      headers:
+        Retry-After:
+          schema: {type: integer}
+        X-RateLimit-Limit:
+          schema: {type: integer}
+        X-RateLimit-Remaining:
+          schema: {type: integer}
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    ServerError:
+      description: Unexpected server or upstream error.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
