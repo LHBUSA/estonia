@@ -1,15 +1,15 @@
 const META={
   en:{
-    title:"Estonia Property Data API — Addresses, Cadastral Parcels & Geometry | PropData",
-    description:"Build on Estonia's official property data with normalized addresses, cadastral identity, available parcel geometry, buildings, relationships and source provenance through one API.",
-    ogTitle:"Estonia's property infrastructure. One API.",
-    ogDescription:"Official-source Estonian addresses, cadastral identity, available parcel geometry, buildings and property relationships — normalized for developers by PropData."
+    title:"Estonia Property Intelligence API — Land, Buildings, Energy & Permits | PropData",
+    description:"Resolve Estonia property identity into cadastral land intelligence, parcel and building geometry, EHR building specifications, energy certificates, document history and source provenance through one API.",
+    ogTitle:"Estonia's property intelligence layer. One API.",
+    ogDescription:"Official-source Estonian addresses, cadastral land data, parcel and building geometry, EHR building intelligence, energy certificates and document history — normalized by PropData."
   },
   et:{
-    title:"Eesti kinnisvaraandmete API — aadressid, katastriüksused ja geomeetria | PropData",
-    description:"Ehita Eesti ametlike kinnisvaraandmete peale: normaliseeritud aadressid, katastriidentiteet, olemasolev geomeetria, hooned, seosed ja andmete päritolu ühe API kaudu.",
-    ogTitle:"Eesti kinnisvaraandmete taristu. Üks API.",
-    ogDescription:"Eesti ametlikud aadressid, katastriidentiteet, olemasolev geomeetria, hooned ja kinnisvaraseosed — PropData poolt arendajatele normaliseeritud."
+    title:"Eesti kinnisvaraintelligentsi API — maa, hooned, energia ja load | PropData",
+    description:"Lahenda Eesti kinnisvaraidentiteet katastri maaandmeteks, krundi- ja hoonegeomeetriaks, EHR hooneandmeteks, energiamärgisteks, dokumendiajalooks ja allikapõhiseks päritoluks ühe API kaudu.",
+    ogTitle:"Eesti kinnisvaraintelligentsi kiht. Üks API.",
+    ogDescription:"Eesti ametlikud aadressid, katastri maaandmed, krundi- ja hoonegeomeetria, EHR hooneinfo, energiamärgised ja dokumendiajalugu — PropData poolt normaliseeritud."
   }
 };
 
