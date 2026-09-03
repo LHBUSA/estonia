@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Estonia property intelligence map</title>
+  <desc id="desc">Stylized Estonia map with cadastral grid, major city nodes and national property graph styling.</desc>
+  <defs>
+    <linearGradient id="land" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#74e8ff" stop-opacity=".34"/>
+      <stop offset=".52" stop-color="#4f8cff" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#79efc6" stop-opacity=".20"/>
+    </linearGradient>
+    <linearGradient id="coast" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8cecff"/>
+      <stop offset="1" stop-color="#73f0c7"/>
+    </linearGradient>
+    <pattern id="parcelGrid" width="44" height="36" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+      <path d="M44 0H0V36" fill="none" stroke="#8bdfff" stroke-opacity=".20" stroke-width="1"/>
+      <path d="M0 18H44M22 0V36" fill="none" stroke="#79efc6" stroke-opacity=".07" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+    <clipPath id="estoniaClip">
+      <path d="M1073.5 241.0 L1097.4 268.7 L984.4 360.2 L1031.5 508.3 L963.4 558.8 L832.4 558.5 L695.7 499.5 L626.1 480.0 L490.9 508.1 L509.3 414.4 L450.9 434.4 L350.1 378.0 L336.3 286.7 L537.1 242.5 L737.3 219.4 L909.6 245.7 Z"/>
+      <path d="M105 430 C121 381 164 354 215 365 C251 373 283 398 305 430 C281 459 243 483 193 487 C151 487 119 466 105 430 Z"/>
+      <path d="M184 314 C197 280 226 264 261 271 C290 279 310 300 315 326 C293 351 260 362 225 353 C201 346 187 333 184 314 Z"/>
+      <path d="M297 419 C310 405 329 401 345 409 C355 418 355 433 346 444 C328 451 309 443 297 419 Z"/>
+      <path d="M319 340 C332 330 349 330 360 340 C359 354 347 364 331 361 C322 356 318 349 319 340 Z"/>
+    </clipPath>
+  </defs>
+
+  <g opacity=".7" filter="url(#soft)"><ellipse cx="694" cy="381" rx="390" ry="250" fill="#3c8cff" fill-opacity=".08"/></g>
+
+  <g clip-path="url(#estoniaClip)">
+    <rect x="70" y="190" width="1050" height="390" fill="url(#land)"/>
+    <rect x="70" y="190" width="1050" height="390" fill="url(#parcelGrid)"/>
+    <g fill="none" stroke="#79efc6" stroke-opacity=".18" stroke-width="2">
+      <path d="M360 332 C510 310 640 320 795 286 S1002 280 1080 328"/>
+      <path d="M372 390 C520 370 690 397 835 365 S1016 380 1060 426"/>
+      <path d="M480 465 C635 430 770 466 927 434 S1015 470 1030 510"/>
+      <path d="M520 250 C590 310 610 392 590 492"/>
+      <path d="M720 222 C690 303 720 410 760 520"/>
+      <path d="M910 245 C862 325 880 430 920 545"/>
+    </g>
+  </g>
+
+  <g fill="url(#land)" stroke="url(#coast)" stroke-width="3.2" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M1073.5 241.0 L1097.4 268.7 L984.4 360.2 L1031.5 508.3 L963.4 558.8 L832.4 558.5 L695.7 499.5 L626.1 480.0 L490.9 508.1 L509.3 414.4 L450.9 434.4 L350.1 378.0 L336.3 286.7 L537.1 242.5 L737.3 219.4 L909.6 245.7 Z"/>
+    <path d="M105 430 C121 381 164 354 215 365 C251 373 283 398 305 430 C281 459 243 483 193 487 C151 487 119 466 105 430 Z"/>
+    <path d="M184 314 C197 280 226 264 261 271 C290 279 310 300 315 326 C293 351 260 362 225 353 C201 346 187 333 184 314 Z"/>
+    <path d="M297 419 C310 405 329 401 345 409 C355 418 355 433 346 444 C328 451 309 443 297 419 Z"/>
+    <path d="M319 340 C332 330 349 330 360 340 C359 354 347 364 331 361 C322 356 318 349 319 340 Z"/>
+  </g>
+
+  <g stroke="#86eaff" stroke-opacity=".24" fill="none" stroke-width="1.5">
+    <path d="M561 247 L872 415 L520 414 L561 247"/>
+    <path d="M561 247 L1102 257 L872 415"/>
+    <path d="M520 414 L201 435 L243 317"/>
+  </g>
+
+  <g font-family="Inter,system-ui,sans-serif" font-weight="800">
+    <g transform="translate(561 247)"><circle r="7" fill="#79efc6" filter="url(#glow)"/><circle r="18" fill="none" stroke="#79efc6" stroke-opacity=".28"/><text x="17" y="-9" fill="#d8f8ff" font-size="14">TALLINN</text><text x="17" y="8" fill="#81a9c4" font-size="10" letter-spacing="1.2">PROPERTY NODE</text></g>
+    <g transform="translate(872 415)"><circle r="6" fill="#75dfff" filter="url(#glow)"/><text x="15" y="5" fill="#bfeeff" font-size="12">TARTU</text></g>
+    <g transform="translate(520 414)"><circle r="6" fill="#75dfff" filter="url(#glow)"/><text x="15" y="5" fill="#bfeeff" font-size="12">PÄRNU</text></g>
+    <g transform="translate(1100 257)"><circle r="5" fill="#75dfff" filter="url(#glow)"/><text x="-15" y="-14" text-anchor="end" fill="#bfeeff" font-size="11">NARVA</text></g>
+    <g transform="translate(201 435)"><circle r="5" fill="#75dfff" filter="url(#glow)"/><text x="-14" y="-12" text-anchor="end" fill="#bfeeff" font-size="11">KURESSAARE</text></g>
+  </g>
+
+  <g transform="translate(77 85)" font-family="Inter,system-ui,sans-serif">
+    <text fill="#8feaff" font-size="13" font-weight="900" letter-spacing="3">EE · NATIONAL PROPERTY GRAPH</text>
+    <text y="33" fill="#d8f6ff" font-size="24" font-weight="850">Estonia / Eesti</text>
+    <text y="58" fill="#7190a7" font-size="12">addresses · cadastral identity · geometry · buildings</text>
+  </g>
+</svg>
