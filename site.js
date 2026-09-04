@@ -1,27 +1,28 @@
 (()=>{
-  const LOCAL_MAP='/assets/estonia-property-map.svg';
-  const HERO_FALLBACK='/assets/identity-graph.svg';
-
-  function makeImagesReliable(){
-    document.querySelectorAll('.hero-map-card img, .coverage-visual img').forEach(img=>{
-      if(img.getAttribute('src')!==LOCAL_MAP){
-        img.src=LOCAL_MAP;
-        img.removeAttribute('srcset');
-        img.removeAttribute('crossorigin');
-      }
-    });
-
+  function preservePremiumVisuals(){
+    // Sep. 2 visual contract: Tallinn photography stays the hero source and
+    // the glass property-graph card keeps the source declared in index.html.
+    // Never replace either with local SVG artwork at runtime.
     const hero=document.querySelector('.hero-photo');
     if(hero){
-      const useFallback=()=>{
-        if(hero.getAttribute('src')!==HERO_FALLBACK){
-          hero.src=HERO_FALLBACK;
-          hero.style.objectPosition='center';
-          hero.style.filter='saturate(.9) contrast(1.04) brightness(.72)';
-        }
-      };
-      hero.addEventListener('error',useFallback,{once:true});
-      if(hero.complete && hero.naturalWidth===0) useFallback();
+      hero.style.removeProperty('object-position');
+      hero.style.removeProperty('filter');
+      hero.addEventListener('error',()=>{
+        hero.removeAttribute('src');
+        document.querySelector('.hero')?.classList.add('hero-photo-unavailable');
+      },{once:true});
+    }
+
+    document.querySelectorAll('.hero-map-card img, .coverage-visual img').forEach(img=>{
+      img.removeAttribute('srcset');
+      img.removeAttribute('crossorigin');
+    });
+
+    if(!document.getElementById('ee-premium-visual-guard')){
+      const style=document.createElement('style');
+      style.id='ee-premium-visual-guard';
+      style.textContent='.hero-photo-unavailable{background:linear-gradient(115deg,#051425 0%,#0b2843 56%,#113b53 100%)}';
+      document.head.appendChild(style);
     }
   }
 
@@ -67,12 +68,12 @@
     }
   }
 
-  makeImagesReliable();
+  preservePremiumVisuals();
 
   const core=document.createElement('script');
   core.src='/site.core.js';
   core.async=false;
-  core.onload=()=>{makeImagesReliable();mountDeveloperSurfaces()};
+  core.onload=()=>{preservePremiumVisuals();mountDeveloperSurfaces()};
   core.onerror=()=>console.error('PropData Estonia core script failed to load');
   document.head.appendChild(core);
 })();
