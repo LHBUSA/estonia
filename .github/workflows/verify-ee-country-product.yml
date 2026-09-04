@@ -1,0 +1,132 @@
+name: Verify Estonia country product
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'docs.html'
+      - 'workspace.html'
+      - 'developer.js'
+      - 'site.js'
+      - 'site.core.js'
+      - 'sitemap.xml'
+      - '.github/workflows/verify-ee-country-product.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify standalone JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check developer.js
+          node --check site.js
+          node --check site.core.js
+          echo 'STANDALONE JS SYNTAX: PASS'
+
+      - name: Verify inline JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+
+          for name in ('docs.html', 'workspace.html'):
+              text = Path(name).read_text(encoding='utf-8')
+              blocks = re.findall(r'<script(?P<attrs>[^>]*)>(?P<body>[\s\S]*?)</script>', text, flags=re.I)
+              checked = 0
+              for index, (attrs, body) in enumerate(blocks, 1):
+                  attrs_l = attrs.lower()
+                  if 'src=' in attrs_l or 'application/ld+json' in attrs_l:
+                      continue
+                  if not body.strip():
+                      continue
+                  with tempfile.NamedTemporaryFile('w', suffix='.js', encoding='utf-8', delete=False) as f:
+                      f.write(body)
+                      tmp = f.name
+                  subprocess.run(['node', '--check', tmp], check=True)
+                  checked += 1
+              if checked == 0:
+                  raise SystemExit(f'{name}: no inline JavaScript block was syntax-checked')
+              print(f'{name}: inline JS blocks checked={checked}')
+          print('INLINE JS SYNTAX: PASS')
+          PY
+
+      - name: Verify bilingual country contract markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F 'propdata_ee_lang' developer.js >/dev/null
+          grep -F 'Language / Keel' docs.html >/dev/null
+          grep -F 'Language / Keel' workspace.html >/dev/null
+          grep -F 'data-surface="docs"' docs.html >/dev/null
+          grep -F 'data-surface="workspace"' workspace.html >/dev/null
+          grep -F 'country=EE' docs.html >/dev/null
+          grep -F 'country=EE' workspace.html >/dev/null
+          grep -F '/v1/auth/usage' workspace.html >/dev/null
+          grep -F '778,325' docs.html >/dev/null
+          grep -F '778,325' workspace.html >/dev/null
+          grep -F '10.27M+' docs.html >/dev/null
+          grep -F '10.27M+' workspace.html >/dev/null
+          grep -F 'EXPANDING NATIONAL BASELINE' docs.html >/dev/null
+          grep -F 'COVERAGE-AWARE' workspace.html >/dev/null
+          grep -F 'data-ee-developer-nav' site.js >/dev/null
+          grep -F 'href="/workspace"' docs.html >/dev/null
+          echo 'BILINGUAL COUNTRY CONTRACT: PASS'
+
+      - name: Verify sitemap and language alternates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          root = ET.fromstring(Path('sitemap.xml').read_text(encoding='utf-8'))
+          text = Path('sitemap.xml').read_text(encoding='utf-8')
+          required = [
+              'https://ee.proptechusa.ai/docs',
+              'hreflang="en"',
+              'hreflang="et"',
+              'hreflang="x-default"',
+          ]
+          missing = [x for x in required if x not in text]
+          if missing:
+              raise SystemExit('sitemap missing: ' + ', '.join(missing))
+          print('SITEMAP XML + HREFLANG: PASS')
+          PY
+
+      - name: Verify static credential hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -REn --exclude-dir=.git --exclude='*.yml' --exclude='*.yaml' 'pd_live_[A-Za-z0-9_-]{12,}|sk-proj-[A-Za-z0-9_-]{12,}' .; then
+            echo 'REAL-LIKE STATIC CREDENTIAL DETECTED'
+            exit 1
+          fi
+          grep -F 'x-api-key: $PROPDATA_API_KEY' docs.html >/dev/null
+          grep -F 'x-api-key: $PROPDATA_API_KEY' workspace.html >/dev/null
+          echo 'STATIC CREDENTIAL HYGIENE: PASS'
+
+      - name: Verify workspace indexing policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F '<meta name="robots" content="noindex,follow">' workspace.html >/dev/null
+          if grep -F 'ee.proptechusa.ai/workspace' sitemap.xml >/dev/null; then
+            echo 'Workspace must remain outside public sitemap'
+            exit 1
+          fi
+          echo 'WORKSPACE INDEXING POLICY: PASS'
