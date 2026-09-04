@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Estonia Property Data API — Addresses, Cadastral Parcels & Geometry | PropData</title>
-  <meta name="description" content="Build on Estonia's official property data with normalized addresses, cadastral identity, available parcel geometry, buildings, relationships and source provenance through one API.">
+  <title>Estonia Property Intelligence API — Land, Buildings, Energy & Permits | PropData</title>
+  <meta name="description" content="Resolve Estonia property identity into national cadastral land intelligence, assessed land value, ADS relationships, available geometry and coverage-aware EHR buildings, energy certificates and document history through one PropData API.">
   <meta name="author" content="PropTechUSA.ai">
   <meta name="application-name" content="PropData Estonia">
   <meta name="theme-color" content="#061426">
@@ -21,8 +21,8 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PropData Estonia">
-  <meta property="og:title" content="Estonia's property infrastructure. One API.">
-  <meta property="og:description" content="Official-source Estonian addresses, cadastral identity, available parcel geometry, buildings and property relationships — normalized for developers by PropData.">
+  <meta property="og:title" content="Estonia's property intelligence layer. One API.">
+  <meta property="og:description" content="Official-source Estonia property identity, national cadastral land intelligence, assessed value, ADS relationships, geometry and coverage-aware EHR building, energy and document history — normalized by PropData.">
   <meta property="og:url" content="https://ee.proptechusa.ai/">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="et_EE">
@@ -33,8 +33,8 @@
   <meta property="og:image:alt" content="Tallinn Old Town at sunset — PropData Estonia property API">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Estonia's property infrastructure. One API.">
-  <meta name="twitter:description" content="Official-source Estonian property identity, cadastral context, buildings and available geometry through one normalized developer API.">
+  <meta name="twitter:title" content="Estonia's property intelligence layer. One API.">
+  <meta name="twitter:description" content="National cadastral land intelligence, assessed value, relationships, geometry and coverage-aware EHR building, energy and document history through one Estonia-native PropData contract.">
   <meta name="twitter:image" content="https://images.unsplash.com/photo-1760097776531-3aa60f1ebd7d?auto=format&fit=crop&w=1200&h=630&q=88">
   <meta name="twitter:image:alt" content="Tallinn Old Town at sunset — PropData Estonia property API">
 
@@ -75,14 +75,20 @@
         "isAccessibleForFree":false,
         "provider":{"@id":"https://proptechusa.ai/#organization"},
         "areaServed":{"@type":"Country","name":"Estonia"},
-        "description":"Estonia property and cadastral data API with official-source address identity, cadastral context, available geometry, buildings, relationships and provenance-aware responses.",
+        "description":"Estonia property intelligence API with official-source address and cadastral identity, national land intelligence, assessed land value, ADS relationships, available geometry and coverage-aware EHR building, energy and document history.",
         "image":"https://images.unsplash.com/photo-1760097776531-3aa60f1ebd7d?auto=format&fit=crop&w=1200&h=630&q=88",
         "featureList":[
           "Official Estonian address resolution",
-          "Cadastral identity and identifiers",
+          "Native cadastral-code property resolution",
+          "National cadastral land intelligence",
+          "Official assessed land value",
+          "ADS property-object relationships",
           "Available parcel geometry",
           "Building-to-parcel relationships",
-          "Source provenance and match semantics",
+          "Coverage-aware EHR building specifications",
+          "Energy certificate history",
+          "Permit and document history",
+          "Source provenance and coverage semantics",
           "REST API access"
         ],
         "offers":[
@@ -104,7 +110,7 @@
         "@type":"FAQPage",
         "@id":"https://ee.proptechusa.ai/#faq",
         "mainEntity":[
-          {"@type":"Question","name":"What does PropData Estonia provide?","acceptedAnswer":{"@type":"Answer","text":"PropData Estonia normalizes official-source Estonian address and cadastral records into a developer API with property identity, available parcel geometry, buildings, explicit relationships, match status and source provenance."}},
+          {"@type":"Question","name":"What does PropData Estonia provide?","acceptedAnswer":{"@type":"Answer","text":"PropData Estonia normalizes official-source Estonian address, cadastral and EHR systems into a country-native property API with national land intelligence, assessed land value, explicit relationships, available geometry and coverage-aware building, energy and document history."}},
           {"@type":"Question","name":"What currency is billing in?","acceptedAnswer":{"@type":"Answer","text":"Self-serve Estonia plans are billed in EUR. Approximate USD equivalents are displayed for reference and can vary with exchange rates and card-network conversion."}},
           {"@type":"Question","name":"Does PropData fabricate missing property values?","acceptedAnswer":{"@type":"Answer","text":"No. Unavailable or unverified property facts remain null or explicitly unavailable rather than being inferred as source facts."}}
         ]
@@ -158,7 +164,7 @@
         <div class="hero-copy reveal visible">
           <div class="eyebrow"><span></span><b data-en="ESTONIA PROPERTY & CADASTRAL API" data-et="EESTI KINNISVARA- JA KATASTRIANDMETE API">ESTONIA PROPERTY & CADASTRAL API</b></div>
           <h1><span data-en="Estonia's property" data-et="Eesti kinnisvara">Estonia's property</span><br><span data-en="infrastructure." data-et="andmetaristu.">infrastructure.</span><br><em data-en="One API." data-et="Üks API.">One API.</em></h1>
-          <p data-en="Resolve Estonian addresses, cadastral units or coordinates into official property identity, available parcel geometry and building relationships — powered by official sources and normalized by PropData." data-et="Lahenda Eesti aadress, katastriüksus või koordinaadid ametlikuks kinnisvaraidentiteediks, olemasolevaks katastrigeomeetriaks ja hooneseosteks — ametlike allikate põhjal ning PropData poolt normaliseerituna.">Resolve Estonian addresses, cadastral units or coordinates into official property identity, available parcel geometry and building relationships — powered by official sources and normalized by PropData.</p>
+          <p data-en="Resolve an Estonian address, native cadastral code or coordinate into property identity, national land intelligence, assessed land value, available parcel geometry and — where covered — EHR building specifications, energy certificates and document history." data-et="Lahenda Eesti aadress, katastritunnus või koordinaat kinnisvaraidentiteediks, riiklikuks maa-intelligentsiks, maa hinnatud väärtuseks, olemasolevaks katastrigeomeetriaks ning katvuse korral EHR hooneandmeteks, energiamärgisteks ja dokumendiajalooks.">Resolve an Estonian address, native cadastral code or coordinate into property identity, national land intelligence, assessed land value, available parcel geometry and — where covered — EHR building specifications, energy certificates and document history.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#pricing"><span data-en="Start for €49 / month" data-et="Alusta €49 / kuu">Start for €49 / month</span></a>
             <a class="btn btn-outline" href="#developers"><span data-en="Explore the API" data-et="Tutvu API-ga">Explore the API</span></a>
@@ -175,7 +181,7 @@
 
         <div class="hero-metrics reveal" aria-label="PropData Estonia data metrics">
           <div><b>1.39M+</b><span data-en="Addresses" data-et="Aadressi">Addresses</span></div>
-          <div><b>505K+</b><span data-en="Parcels with geometry" data-et="Geomeetriaga katastriüksust">Parcels with geometry</span></div>
+          <div><b>778K+</b><span data-en="Land-enriched cadastral units" data-et="Maaandmetega rikastatud katastriüksust">Land-enriched cadastral units</span></div>
           <div><b>971K+</b><span data-en="Building ↔ parcel links" data-et="Hoone ↔ katastriüksuse seost">Building ↔ parcel links</span></div>
           <div><b>2.44M+</b><span data-en="Property objects" data-et="Kinnisvaraobjekti">Property objects</span></div>
           <div><b>10.27M+</b><span data-en="Object ↔ address links" data-et="Objekti ↔ aadressi seost">Object ↔ address links</span></div>
