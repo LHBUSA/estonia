@@ -65,7 +65,7 @@ jobs:
           print('INLINE JS SYNTAX: PASS')
           PY
 
-      - name: Verify bilingual country contract markers
+      - name: Verify bilingual deep country contract markers
         shell: bash
         run: |
           set -euo pipefail
@@ -85,7 +85,13 @@ jobs:
           grep -F 'COVERAGE-AWARE' workspace.html >/dev/null
           grep -F 'data-ee-developer-nav' site.js >/dev/null
           grep -F 'href="/workspace"' docs.html >/dev/null
-          echo 'BILINGUAL COUNTRY CONTRACT: PASS'
+          grep -F 'Estonia Property Intelligence API — Land, Buildings, Energy & Permits | PropData' index.html >/dev/null
+          grep -F 'National cadastral land intelligence' index.html >/dev/null
+          grep -F 'Official assessed land value' index.html >/dev/null
+          grep -F 'Energy certificate history' index.html >/dev/null
+          grep -F 'Permit and document history' index.html >/dev/null
+          grep -F '>778K+</b><span data-en="Land-enriched cadastral units"' index.html >/dev/null
+          echo 'BILINGUAL DEEP COUNTRY CONTRACT: PASS'
 
       - name: Verify sitemap and language alternates
         shell: bash
@@ -94,7 +100,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import xml.etree.ElementTree as ET
-          root = ET.fromstring(Path('sitemap.xml').read_text(encoding='utf-8'))
+          ET.fromstring(Path('sitemap.xml').read_text(encoding='utf-8'))
           text = Path('sitemap.xml').read_text(encoding='utf-8')
           required = [
               'https://ee.proptechusa.ai/docs',
