@@ -52,4 +52,11 @@
   window.PropDataEEI18n={setLanguage,getLanguage,applyText,key:KEY};
   document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>setLanguage(btn.dataset.lang)));
   setLanguage(initialLanguage(),{updateUrl:false,emit:false});
+
+  if(document.body?.dataset?.surface==='docs'){
+    const s=document.createElement('script');
+    s.src='/docs-depth.js';
+    s.defer=true;
+    document.body.appendChild(s);
+  }
 })();
