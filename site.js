@@ -21,5 +21,6 @@
   }
   function loadDemo(){const demo=document.createElement('script');demo.src='/product-demo.js';demo.async=false;document.head.appendChild(demo)}
   preservePremiumVisuals();
+  const trust=document.createElement('script');trust.src='/trust-badges.js';trust.async=false;document.head.appendChild(trust);
   const core=document.createElement('script');core.src='/site.core.js';core.async=false;core.onload=()=>{preservePremiumVisuals();mountDeveloperSurfaces();loadDemo()};core.onerror=()=>console.error('PropData Estonia core script failed to load');document.head.appendChild(core);
 })();
