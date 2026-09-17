@@ -19,8 +19,15 @@
     const developerHead=[...document.querySelectorAll('.footer-col h4')].find(h=>/DEVELOPERS|ARENDAJATELE/i.test(h.textContent||''));const developerCol=developerHead?.parentElement;
     if(developerCol&&!developerCol.querySelector('[data-ee-footer-workspace]')){const workspace=document.createElement('a');workspace.href='/workspace';workspace.dataset.eeFooterWorkspace='1';workspace.dataset.en='Country Workspace';workspace.dataset.et='Riigi töölaud';workspace.textContent=currentLanguage()==='et'?'Riigi töölaud':'Country Workspace';const docs=[...developerCol.querySelectorAll('a')].find(a=>a.getAttribute('href')==='/docs'||a.href.includes('propdata.proptechusa.ai/docs'));if(docs)docs.insertAdjacentElement('afterend',workspace);else developerCol.appendChild(workspace)}
   }
+  function mountSalesContact(){
+    const footer=document.querySelector('footer');
+    if(!footer||footer.querySelector('[data-proptech-sales-contact]'))return;
+    if(!document.getElementById('proptech-sales-contact-style')){const style=document.createElement('style');style.id='proptech-sales-contact-style';style.textContent='.proptech-sales-contact{width:min(1200px,calc(100% - 40px));margin:0 auto;padding:18px 0;border-top:1px solid rgba(127,127,127,.28);display:flex;align-items:center;justify-content:center;gap:12px 22px;flex-wrap:wrap;font-size:12px}.proptech-sales-contact span{font-size:9px;font-weight:800;letter-spacing:.12em;opacity:.55}.proptech-sales-contact a{color:inherit;text-decoration:none;font-weight:800;opacity:.82}.proptech-sales-contact a:hover,.proptech-sales-contact a:focus-visible{opacity:1;text-decoration:underline}';document.head.appendChild(style)}
+    const row=document.createElement('div');row.className='proptech-sales-contact';row.dataset.proptechSalesContact='true';row.setAttribute('aria-label','PropTechUSA.ai sales contact');row.innerHTML='<span>CONTACT PROPTECHUSA.AI</span><a href="tel:18887843881" aria-label="Call PropTechUSA.ai sales at 1-888-784-3881">1-888-784-3881</a><a href="mailto:sales@proptechusa.ai" aria-label="Email PropTechUSA.ai sales at sales@proptechusa.ai">sales@proptechusa.ai</a>';footer.appendChild(row)
+  }
   function loadDemo(){const demo=document.createElement('script');demo.src='/product-demo.js';demo.async=false;document.head.appendChild(demo)}
   preservePremiumVisuals();
+  mountSalesContact();
   const trust=document.createElement('script');trust.src='/trust-badges.js';trust.async=false;document.head.appendChild(trust);
-  const core=document.createElement('script');core.src='/site.core.js';core.async=false;core.onload=()=>{preservePremiumVisuals();mountDeveloperSurfaces();loadDemo()};core.onerror=()=>console.error('PropData Estonia core script failed to load');document.head.appendChild(core);
+  const core=document.createElement('script');core.src='/site.core.js';core.async=false;core.onload=()=>{preservePremiumVisuals();mountDeveloperSurfaces();mountSalesContact();loadDemo()};core.onerror=()=>console.error('PropData Estonia core script failed to load');document.head.appendChild(core);
 })();
